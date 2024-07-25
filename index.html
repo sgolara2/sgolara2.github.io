@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Coordinated View</title>
-    <meta name="description" content="Coordinated View" />
+    <title>Narrative Visualization</title>
+    <meta name="description" content="Narrative Visualization" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
     <script src="./dist/d3.js"></script>
     <link href="./mvc.css" rel="stylesheet" />
     <style>
@@ -14,6 +16,15 @@
         fill: steelblue;
         fill-opacity: 0.8;
       }
+
+      svg {background-color: white;font-family: 'Lato';}
+      /* path {fill: none;} */
+      .annotation text {fill: var(--annotation-context-color);}
+      /* .annotation path {stroke: var(--annotation-context-color);} */
+      /* .annotation-note-title {font-weight: bold color: red;} */
+      .annotation-note-bg {fill: rgba(0, 0, 0, 0);}
+      /* text.title {font-size: 1.2em;font-weight: bold;} */
+
 
       rect:hover {
         fill-opacity: 1;
@@ -40,6 +51,7 @@
       h3 {
         text-align: center;
       }
+
     </style>
   </head>
 
@@ -89,11 +101,20 @@
         <!-- <h3>Age Histogram</h3> -->
         <h3>Age</h3>
         <svg id="age"></svg>
+
       </section>
       <section>
         <!-- <h3>Fare Histogram</h3> -->
         <h3>Salary</h3>
-        <svg id="fare"></svg>
+        <svg id="fare">
+        <!-- svg.append("line")
+          .attr("x1", x(10) )
+          .attr("x2", x(10) )
+          .attr("y1", y(0))
+          .attr("y2", y(600))
+          .attr("stroke", "grey")
+          .attr("stroke-dasharray", "4") -->
+        </svg>
       </section>
 
       <section>
@@ -104,6 +125,7 @@
         <h3>More than 5 years employed</h3>
         <svg id="survived"></svg>
       </section>
+
       <!-- <br> -->
       <!-- <svg> width="960" height="600"></svg> -->
       <!-- <p> hello live  </p> -->
@@ -114,7 +136,27 @@
     <p>   </p>
     <img src="Illinois_logo_fullcolor_tm_rgb.png" alt="Logo" style="width: 2vw; min-width: 11px;"/>
 
+    <!-- <svg width="460" height="400" id="example1"></svg> -->
     <script>
+    const annotations = [{note: {label: "128,151$",title: "Median household income in the San Francisco"},color: ["purple"],x: 120,y: 220,dy: 120,dx: 150}]
+    // const fontSize = d3.scaleLinear().range([0, 20]).clamp(true)
+    // const wrap = d3.scaleLinear().range([40, 160]).clamp(true)
+    // let ratio = window.innerWidth/1200
+    const makeAnnotations = d3.annotation().annotations(annotations)
+    // const makeAnnotations = d3.annotation().textWrap(wrap(ratio)).type(d3.annotationCalloutCircle).notePadding(10).annotations(annotations)
+    d3.select("#fare").append("g").style('font-size', "12px").style('fill', "purple").call(makeAnnotations)
+    </script>
+
+    <script>
+    const annotationsLeft = [{note: {label: "41.8 years",title: "Median age of US Labor force"},color: ["purple"],x: 120,y: 190,dy: 120,dx: 150}]
+    const makeAnnotationsLeft = d3.annotation().annotations(annotationsLeft)
+    // const makeAnnotations = d3.annotation().textWrap(wrap(ratio)).type(d3.annotationCalloutCircle).notePadding(10).annotations(annotations)
+    d3.select("#age").append("g").style('font-size', "12px").style('fill', "purple").call(makeAnnotationsLeft)
+    </script>
+
+    <script>
+
+////
       const state = {
         data: [],
         passengerClass: "",
@@ -382,6 +424,72 @@
       //   state.passengerClass = selected;
       //   updateApp();
       });
+
+
+    // var annotations = [ {
+    // note: {
+    //   label: "My first annotation",
+    //   wrap: x(40)-x(29),
+    // },
+    // data:{x: 29,y: "0-4 hours per week"},
+    // dx:50,
+    // dy:50,
+    // type:d3.annotationLabel
+    // }
+    // ,{
+    //   type:d3.annotationCalloutRect,
+    //   note: {
+    //     title: "Look at this region"
+    //   },
+    //   data: {
+    //     x:30,
+    //     y: "10–19 hours per week"
+    //     },
+    //   dy: 25,
+    //   dx: 60,
+    //   subject: {
+    //     width: 50,
+    //     height: y0.bandwidth()
+    //   }
+    // },{
+    //     type:d3.annotationXYThreshold,
+    //     note: {
+    //       label: "Reference line",
+    //     },
+    //     data: { x: 28.5, y: "10–19 hours per week" },
+    //     dy: -10,
+    //     dx:10,
+    //     subject: {
+    //       y1: margin.top,
+    //       y2: margin.top+height
+    //     }
+    //   },{
+    //     type:d3.annotationCalloutCircle,
+    //     note: {
+    //       title: "Oooh!",
+    //     },
+    //     data: { x: 35, y: "0–4 hours per week" },
+    //     dy: 0,
+    //     dx: 10,
+    //     subject: {
+    //       radius: 7,
+    //       radiusPadding: 0
+    //     }
+    //   }
+      // ]
+      // var makeAnnotations = d3.annotation()
+      //       .notePadding(0)
+      //       .accessors({
+      //         x: function(d){return x(d.x)+10},//margin.left},
+      //         y: function(d){return y0(d.y)+10}//+margin.top}
+      //       })
+      //       .annotations(annotations)
+      //
+      // d3.select("svg")
+      //     .append("g")
+      //     .attr("class", "annotation-group")
+      //     .call(makeAnnotations)
+
     </script>
   </body>
 </html>
